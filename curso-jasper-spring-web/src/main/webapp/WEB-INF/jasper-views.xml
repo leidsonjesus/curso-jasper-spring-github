@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="findAll" class="org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView">
+        <property name="url" value="classpath:/relatorios/findContatos.jasper" />
+        <property name="reportDataKey" value="JRCollection"/>
+        <property name="exporterParameters">
+        	<map>
+        		<entry key="net.sf.jasperreports.engine.export.JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN" value="false"/>
+        	</map>
+        </property>
+    </bean>
+    
+   <bean id="htmlGrafico" class="br.com.devmedia.curso.config.JasperToHtmlViewConfig">
+   		<property name="url" value="classpath:/relatorios/findCidadesFones.jasper"/>
+   		<property name="reportDataKey" value="JRCollection"/>
+         <property name="exporterParameters">
+        	<map>
+        		<entry key="net.sf.jasperreports.engine.export.JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN" value="false"/>
+        		<entry key="net.sf.jasperreports.engine.export.JRHtmlExporterParameter.IMAGES_URI" value="/curso-jasper-spring-web/image?image="/>
+        	</map>
+        </property>  		
+   </bean> 
+</beans>

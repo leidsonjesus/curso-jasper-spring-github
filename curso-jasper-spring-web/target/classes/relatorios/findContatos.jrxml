@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
+<!-- 2016-08-16T01:58:19 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="findContatos" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="95d5e06e-4771-45d5-96ce-d128fd466970">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JPA_DATAADAPTER.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="SUB_REPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString language="EJBQL">
+		<![CDATA[from Contato c]]>
+	</queryString>
+	<field name="endereco" class="br.com.devmedia.curso.entity.Endereco">
+		<fieldDescription><![CDATA[endereco]]></fieldDescription>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[nome]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Long">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<field name="telefones" class="java.util.List">
+		<fieldDescription><![CDATA[telefones]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="802" height="40" backcolor="#6666FF" uuid="56b9847f-ddea-4898-8a50-d30dff0c896c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="20"/>
+				</textElement>
+				<text><![CDATA[Lista de Contatos]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="100" height="20" backcolor="#CCFFFF" uuid="1cfdb595-d364-42f0-a811-cdadc09324e4">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="100" y="0" width="180" height="20" backcolor="#CCFFFF" uuid="3e6a39b7-b61e-4a98-9e9c-321b0af82e9c">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="280" y="0" width="400" height="20" backcolor="#CCFFFF" uuid="6b8520f0-451b-492e-906f-bce54ed4b3b7">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Endereço]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="680" y="0" width="122" height="20" backcolor="#CCFFFF" uuid="b80b7270-2a50-4af1-927b-229c4cf3607e">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telefones]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="52bbbf39-acb7-477a-a0ca-7b14ccc62e73"/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="180" height="20" uuid="d571b5ba-4732-405c-b71f-9e277bb61c5c"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="400" height="20" uuid="8e40bba7-141c-47b7-8104-10922da3ace1"/>
+				<textFieldExpression><![CDATA[$F{endereco}.getLogradouro() +", "+$F{endereco}.getNumero()+" - Bairro "+$F{endereco}.getBairro()+", "+$F{endereco}.getCidade()+"."]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="680" y="0" width="122" height="20" uuid="9c265755-1dfc-4ca0-8a5f-9e8e8f3c63cc"/>
+				<subreportParameter name="CONTATO_ID">
+					<subreportParameterExpression><![CDATA[$F{id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{telefones})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUB_REPORT_DIR} + "findSubContatoFones.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="602" y="0" width="100" height="30" uuid="6009f432-993c-443a-b1cf-2e78879ca4c8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="702" y="0" width="100" height="30" uuid="69ec00a0-4b07-4005-94fa-da57694f28ad"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="0" width="200" height="30" uuid="8019fbc5-6ae9-4941-8da0-cd525906c642"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DevMedia Cursos]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="0" y="0" width="100" height="30" uuid="b73048a2-85a5-4161-b235-f2c54f41ac5f"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="30">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="0" y="0" width="280" height="30" uuid="87b457ad-534c-45ea-9e6d-d66f7576d201"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss").format(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="0" width="200" height="30" uuid="4bc8de92-877c-4782-a5d5-a919cf1b2443"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<text><![CDATA[DevMedia Cursos]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="602" y="0" width="100" height="30" uuid="9e72cfa8-7f11-4be3-8e91-1c7b2a8e0cc4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="702" y="0" width="100" height="30" uuid="d3dd4c11-ce9f-4c06-b4ac-47ee1d6fdbb6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="30" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="802" height="30" backcolor="#EDEDED" uuid="1264dd11-aa29-4c7c-b80b-1114feb7c97e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[F I M]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

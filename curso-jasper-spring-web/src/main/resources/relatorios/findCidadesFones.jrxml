@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
+<!-- 2016-09-01T01:40:03 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="findCidadesFones" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0df3e6c1-a54a-4f75-87f8-d1d4d1db8d6b">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JDBC Data Adapter "/>
+	<subDataset name="GraficoDataset" uuid="a287e46a-53af-434a-8690-be3640513926">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JDBC Data Adapter "/>
+		<parameter name="PARAM_CIDADE" class="java.lang.String">
+			<defaultValueExpression><![CDATA[new String()]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select
+	t.tipoFone as tipoFone,
+    count(t.tipoFone) as totalTipoFones
+from
+	telefones t
+    join contatos c 
+		on c.id = t.contato_id
+	join enderecos e
+		on c.endereco_id = e.id
+where
+	e.cidade like $P{PARAM_CIDADE}
+group by
+	t.tipoFone
+order by 
+	totalTipoFones asc]]>
+		</queryString>
+		<field name="tipoFone" class="java.lang.String"/>
+		<field name="totalTipoFones" class="java.lang.Long"/>
+		<group name="tipoFone">
+			<groupExpression><![CDATA[$F{tipoFone}]]></groupExpression>
+		</group>
+	</subDataset>
+	<queryString>
+		<![CDATA[select
+	e.cidade, count(c.id) AS totalContatosCidade
+from
+	enderecos e
+    join contatos c 
+		on e.id = c.endereco_id
+group by
+	e.cidade
+order by
+	e.cidade asc]]>
+	</queryString>
+	<field name="cidade" class="java.lang.String"/>
+	<field name="totalContatosCidade" class="java.lang.Long"/>
+	<variable name="TOTAL_CONTATOS" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalContatosCidade}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="802" height="38" backcolor="#99FFFF" uuid="895cfbd8-72cc-400b-86b9-cfe6b1ae8c80"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Gráfico de Quantidade de Telefones por Tipo e Cidade]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="277" splitType="Stretch">
+			<textField>
+				<reportElement x="80" y="47" width="200" height="30" uuid="08120572-8cdb-4f61-a636-a6b9f4de458d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="80" width="100" height="30" uuid="32edee74-d1a0-4fcd-8e6f-58a3a8beeeef"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{totalContatosCidade}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="80" width="200" height="30" uuid="0d9a5514-54a2-4b1a-a9d3-eb1176721880"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Nº de contatos :]]></text>
+			</staticText>
+			<pieChart>
+				<chart evaluationTime="Page">
+					<reportElement x="380" y="50" width="420" height="227" uuid="2c8a98ee-5b0c-4d76-9246-623c6b1bc4b3"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="GraficoDataset" uuid="1b5abf33-6ae2-4b70-9dfa-3fc87bfa88d0">
+							<datasetParameter name="PARAM_CIDADE">
+								<datasetParameterExpression><![CDATA[$F{cidade}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<keyExpression><![CDATA[$F{tipoFone}]]></keyExpression>
+					<valueExpression><![CDATA[$F{totalTipoFones}]]></valueExpression>
+					<labelExpression><![CDATA[$F{tipoFone} +" : " + $F{totalTipoFones}]]></labelExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="30" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="80" y="0" width="140" height="30" uuid="ae1517d1-10f2-4a61-9db4-987408ba5b5d"/>
+				<text><![CDATA[Total Acumulado de Contatos: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="220" y="0" width="160" height="30" uuid="bb321f5e-cde5-47d6-8a1f-9effd3c471e0"/>
+				<textFieldExpression><![CDATA[$V{TOTAL_CONTATOS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement positionType="Float" x="602" y="0" width="100" height="31" uuid="bef7eb10-d46d-406f-a1f0-8208beec8c68"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="702" y="0" width="100" height="31" uuid="f45a4320-70b9-423d-a3c1-d7878c658a2f"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
